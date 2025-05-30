@@ -61,6 +61,23 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+
+const displayTransactions = function(movements){
+  containerMovements.innerHTML = '';
+
+  movements.forEach (function(move,i){
+    const type = move > 0 ? 'deposit' : 'withdrawal';
+    const html = `<div class="movements__row">
+          <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
+          <div class="movements__value">${move}€</div>
+        </div>`;
+
+        containerMovements.insertAdjacentHTML('afterbegin',html);
+  })
+}
+
+displayTransactions(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -73,4 +90,39 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
+const euroToUSD= 1.1;
+
+const movementsUsd = movements.map(function(mov)
+{
+  return mov * euroToUSD;
+})
+
+const movementsUsdArr = movements.map(mov=> mov * euroToUSD);
+
+// console.log(movements);
+
+// console.log(movementsUsdArr);
+
 /////////////////////////////////////////////////
+
+
+
+// Challenge
+
+// const checkDogs = function(arr1,arr2){
+//   const slicedArr1 = arr1.slice();
+//   slicedArr1.splice(0,1);
+//   slicedArr1.splice(-2);
+//   console.log(slicedArr1);
+//   const concatArr = slicedArr1.concat(arr2);
+//   concatArr.forEach(function(age,i)
+// {
+//   console.log(age>=3?`Dog number ${i+1} is an adult, and is ${age} years old` : `Dog number ${i+1} is still a puppy`);
+// })
+// }
+
+// checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
+
+// checkDogs([9, 16, 6, 8, 3],[10, 5, 6, 1, 4]);
+/////////////////////////////////////////////////
+
