@@ -78,6 +78,29 @@ const displayTransactions = function(movements){
 
 displayTransactions(account1.movements);
 
+const calcDisplayBalance = function(move)
+{
+  const balance = move.reduce((acc,cur)=>{
+    return acc + cur;
+  },0)
+  // console.log(balance);
+  labelBalance.innerHTML = `${balance}€`;
+}
+
+calcDisplayBalance(account1.movements);
+
+
+const createUserNames = function(accs)
+{
+  accs.forEach(acc=>{
+    acc.userName = acc.owner.split(' ').map(user=>user[0]).join('');
+  })
+}
+
+createUserNames(accounts);
+
+
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -102,6 +125,9 @@ const movementsUsdArr = movements.map(mov=> mov * euroToUSD);
 // console.log(movements);
 
 // console.log(movementsUsdArr);
+
+const negativeMovements = movements.filter(mov=>mov<0);
+// console.log(negativeMovements);
 
 /////////////////////////////////////////////////
 
