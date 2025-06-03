@@ -76,7 +76,7 @@ const displayTransactions = function(movements){
   })
 }
 
-displayTransactions(account1.movements);
+
 
 const calcDisplayBalance = function(move)
 {
@@ -87,7 +87,19 @@ const calcDisplayBalance = function(move)
   labelBalance.innerHTML = `${balance}€`;
 }
 
-calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function(acc)
+{
+  const income = acc.movements.filter(mov => mov > 0).reduce((acc,cur) => acc+cur,0);
+  labelSumIn.textContent = `${income} €`;
+
+  const out = Math.abs(acc.movements.filter(mov => mov < 0).reduce((acc,cur) => acc+cur,0));
+  labelSumOut.textContent = `${out} €`;
+  
+  const interest = acc.movements.filter(mov => mov > 0).map(deposit => (deposit * acc.interestRate)/100).filter(interest => interest > 1).reduce((total,int) => total + int, 0);
+  labelSumInterest.textContent = `${interest} €`
+}
+
 
 
 const createUserNames = function(accs)
@@ -98,6 +110,29 @@ const createUserNames = function(accs)
 }
 
 createUserNames(accounts);
+
+let currentAccount;
+
+btnLogin.addEventListener('click',function(e)
+{
+  e.preventDefault();
+  currentAccount = accounts.find(acc=>acc.userName.toLowerCase() === inputLoginUsername.value.toLowerCase());
+  console.log(currentAccount);
+
+  if(currentAccount?.pin === Number(inputLoginPin.value))
+  {
+    console.log('Login');
+    labelWelcome.textContent = `Welcome back ${currentAccount.owner.split(' ')[0]}`;
+
+    containerApp.style.opacity = 1;
+
+    displayTransactions(currentAccount.movements);
+
+    calcDisplayBalance(currentAccount.movements);
+
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 
 
@@ -133,7 +168,7 @@ const negativeMovements = movements.filter(mov=>mov<0);
 
 
 
-// Challenge
+// Challenge1
 
 // const checkDogs = function(arr1,arr2){
 //   const slicedArr1 = arr1.slice();
@@ -150,5 +185,54 @@ const negativeMovements = movements.filter(mov=>mov<0);
 // checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
 
 // checkDogs([9, 16, 6, 8, 3],[10, 5, 6, 1, 4]);
+
+
+// Challenge 2
+
+
+const calcAverageHumanAge = function(dogs)
+{
+  const humanAge = dogs.map(dogAge=> {
+    if(dogAge<=2)
+    {
+      return 2*dogAge;
+    }
+    else{
+      return 16 + dogAge *4;
+    }
+  })
+    // console.log(adultAge);
+
+  const adultAge= humanAge.filter(age => age >= 18);
+  // console.log(adultAge);
+  // console.log(adultAge.length)
+  const totalAge = adultAge.reduce((acc,curr) => acc+curr,0);
+  
+  return totalAge/adultAge.length;
+}
+
+// console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+// console.log(calcAverageHumanAge( [16, 6, 10, 5, 6, 1, 4]));
+
+
+// Challenge 3
+
+const CalAvgHuman = arr => arr.map(dogAge=> (dogAge <= 2 ? 2 * dogAge : 16 + dogAge * 4)).filter(humanAge=>humanAge>=18).reduce((acc,humanAge,i,arr)=>acc+humanAge/arr.length,0);
+
+// console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+// console.log(calcAverageHumanAge( [16, 6, 10, 5, 6, 1, 4]));
+
+// let account;
+// for (const acc of accounts)
+// {
+//   if(acc.owner === 'Jessica Davis')
+//   {
+//     account = acc;
+//     break;
+//   }
+// }
+
+
+// console.log(account);
 /////////////////////////////////////////////////
 
