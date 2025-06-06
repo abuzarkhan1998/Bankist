@@ -156,6 +156,19 @@ if(amount > 0 && toAccount && currentAccount?.balance  >= amount && toAccount?.u
 inputTransferTo.value = inputTransferAmount.value = '';
 });
 
+btnClose.addEventListener('click',function(e){
+e.preventDefault();
+if(currentAccount.userName.toLowerCase() === inputCloseUsername.value.toLowerCase() && currentAccount.pin === Number(inputClosePin.value))
+{
+  // console.log("Deletion Successful");
+  const index = accounts.findIndex(acc => acc.userName.toLowerCase() === currentAccount.userName.toLowerCase());
+  
+  accounts.splice(index,1);
+  containerApp.style.opacity = 0;
+}
+inputCloseUsername.value = inputClosePin.value = '';
+})
+
 
 
 /////////////////////////////////////////////////
