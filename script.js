@@ -156,6 +156,19 @@ if(amount > 0 && toAccount && currentAccount?.balance  >= amount && toAccount?.u
 inputTransferTo.value = inputTransferAmount.value = '';
 });
 
+
+btnLoan.addEventListener('click',function(e){
+  e.preventDefault();
+  
+  const loanAmount = Number(inputLoanAmount.value);
+  if(loanAmount > 0 &&  currentAccount.movements.some(mov => mov >= loanAmount * 0.1)) 
+  {
+    currentAccount.movements.push(loanAmount);
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+})
+
 btnClose.addEventListener('click',function(e){
 e.preventDefault();
 if(currentAccount.userName.toLowerCase() === inputCloseUsername.value.toLowerCase() && currentAccount.pin === Number(inputClosePin.value))
