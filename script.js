@@ -5,11 +5,57 @@
 // BANKIST APP
 
 // Data
+// const account1 = {
+//   owner: 'Jonas Schmedtmann',
+//   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+//   interestRate: 1.2, // %
+//   pin: 1111,
+// };
+
+// const account2 = {
+//   owner: 'Jessica Davis',
+//   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+//   interestRate: 1.5,
+//   pin: 2222,
+// };
+
+// const account3 = {
+//   owner: 'Steven Thomas Williams',
+//   movements: [200, -200, 340, -300, -20, 50, 400, -460],
+//   interestRate: 0.7,
+//   pin: 3333,
+// };
+
+// const account4 = {
+//   owner: 'Sarah Smith',
+//   movements: [430, 1000, 700, 50, 90],
+//   interestRate: 1,
+//   pin: 4444,
+// };
+
+// const accounts = [account1, account2, account3, account4];
+
+
+// DIFFERENT DATA! Contains movement dates, currency and locale
+
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+  ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
 };
 
 const account2 = {
@@ -17,23 +63,22 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+
+  movementsDates: [
+    '2019-11-01T13:15:33.035Z',
+    '2019-11-30T09:48:16.867Z',
+    '2019-12-25T06:04:23.907Z',
+    '2020-01-25T14:18:46.235Z',
+    '2020-02-05T16:33:06.386Z',
+    '2020-04-10T14:43:26.374Z',
+    '2020-06-25T18:49:59.371Z',
+    '2020-07-26T12:01:20.894Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
-const account3 = {
-  owner: 'Steven Thomas Williams',
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
-  interestRate: 0.7,
-  pin: 3333,
-};
-
-const account4 = {
-  owner: 'Sarah Smith',
-  movements: [430, 1000, 700, 50, 90],
-  interestRate: 1,
-  pin: 4444,
-};
-
-const accounts = [account1, account2, account3, account4];
+const accounts = [account1, account2];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -62,10 +107,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 
-const displayTransactions = function(movements){
+const displayTransactions = function(movements, sort=false){
   containerMovements.innerHTML = '';
 
-  movements.forEach (function(move,i){
+  const movs = sort ? movements.sort((a,b) => a-b) : movements;
+
+  movs.forEach (function(move,i){
     const type = move > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
@@ -183,6 +230,12 @@ inputCloseUsername.value = inputClosePin.value = '';
 })
 
 
+let isSorted = false;
+btnSort.addEventListener('click', function(){
+  displayTransactions(currentAccount.movements, !isSorted);
+  isSorted = !isSorted;
+})
+
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -282,5 +335,50 @@ const CalAvgHuman = arr => arr.map(dogAge=> (dogAge <= 2 ? 2 * dogAge : 16 + dog
 
 
 // console.log(account);
+
+
+//Challenge 4
+
+const dogs = [
+ { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+ { weight: 8, curFood: 200, owners: ['Matilda'] },
+ { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+ { weight: 32, curFood: 340, owners: ['Michael'] },
+ ];
+
+ dogs.forEach(dog => dog.recommended = (dog.weight ** 0.75) * 28 );
+//  console.log(dogs);
+
+ const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+//  console.log(sarahDog);
+ const isSarahRecommendedFood = sarahDog.curFood > sarahDog.recommended * 1.10 ? 'Too much' : sarahDog.curFood < sarahDog.recommended * 0.90 ? 'Too Little' : 'Perfect';
+//  console.log(isSarahRecommendedFood);
+
+ const {ownersEatTooMuch, ownersEatTooLittle} = Object.groupBy(dogs, ({curFood, recommended}) => curFood > recommended * 1.10 ? "ownersEatTooMuch" : curFood < recommended * 0.90 ? "ownersEatTooLittle" : "None");
+//  console.log(ownersEatTooMuch,ownersEatTooLittle);
+
+// ownersEatTooMuch.forEach(owner => console.log(`${owner.owners.join(' and ')} dogs eat too much`));
+// ownersEatTooLittle.forEach(owner => console.log(`${owner.owners.join(' and ')} dogs eat too little`));
+
+const isExactRecommended = dogs.some(dog => dog.curFood === dog.recommended);
+// console.log(isExactRecommended);
+
+const isOkayRecommended = dogs.some(dog => dog.curFood < dog.recommended * 1.10 && dog.curFood > dog.recommended * 0.90);
+// console.log(isOkayRecommended);
+
+const okayDogs = dogs.filter(dog => dog.curFood < dog.recommended * 1.10 && dog.curFood > dog.recommended * 0.90);
+// console.log(okayDogs);
+
+const SortedDogs = dogs.sort((a,b) => a.curFood - b.curFood);
+// console.log(SortedDogs);
+
+const groupedByOwnerCount = Object.groupBy(dogs, (dog => dog.owners.length));
+// console.log(groupedByOwnerCount);
+
+const sortedDogsbyRecommended = dogs.toSorted((a,b) => a.recommended - b.recommended);
+// console.log(sortedDogsbyRecommended);
+// console.log(dogs)
+
 /////////////////////////////////////////////////
+
 
