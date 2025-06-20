@@ -114,11 +114,19 @@ const today = new Date();
 const displayTransactions = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? acc.movements.sort((a, b) => a - b) : acc.movements;
+  const combinedMovement = acc.movements.map((movement,i) => ({movement,movementsDate : acc.movementsDates[i]}));
+  console.log(combinedMovement);
 
-  movs.forEach(function (move, i) {
+  // const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
+
+  if(sort) combinedMovement.sort((a,b) => a.movement - b.movement);
+
+
+  combinedMovement.forEach(function (obj, i) {
+    const { movement : move,movementsDate } = obj;
+    console.log(move, movementsDate);
     const type = move > 0 ? 'deposit' : 'withdrawal';
-    const date = new Date(acc.movementsDates[i]);
+    const date = new Date(movementsDate);
     // console.log(date);
     const day = `${date.getDate()}`.padStart(2, 0);
     const month = `${date.getMonth() + 1}`.padStart(2, 0);
